@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinancePage — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="10" width="3.5" height="6" rx="1.2" fill="white"/>
+          <rect x="7.25" y="6" width="3.5" height="10" rx="1.2" fill="white"/>
+          <rect x="12.5" y="2" width="3.5" height="14" rx="1.2" fill="white"/>
+        </svg>
+      </div>
+      <span class="logo-text">FinancePage</span>
+    </div>
+
+    <div class="nav-section">Main</div>
+    <div class="nav-item active" data-page="overview">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.9"/>
+        <rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.5"/>
+        <rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.5"/>
+        <rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.3"/>
+      </svg>
+      <span>Overview</span>
+    </div>
+    <div class="nav-item" data-page="transactions">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span>Transactions</span>
+    </div>
+    <div class="nav-item" data-page="insights">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 13 L5 8 L8 10 L11 5 L14 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Insights</span>
+    </div>
+
+    <div class="nav-section">Account</div>
+    <div class="nav-item" data-page="overview">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M2.5 14c0-3 2.5-4.8 5.5-4.8s5.5 1.8 5.5 4.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span>Profile</span>
+    </div>
+    <div class="nav-item" data-page="overview">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span>Settings</span>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="role-badge-wrap">
+        <div class="role-dot admin" id="role-dot"></div>
+        <div>
+          <div class="role-name" id="sidebar-role-text">Administrator</div>
+          <div class="role-sub">Active session</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title" id="page-title">Dashboard overview</div>
+        <div class="viewer-badge" id="viewer-badge">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>
+          View only
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="period-group">
+          <button class="period-btn" data-period="1W">1W</button>
+          <button class="period-btn active" data-period="1M">1M</button>
+          <button class="period-btn" data-period="3M">3M</button>
+          <button class="period-btn" data-period="1Y">1Y</button>
+        </div>
+        <div class="role-switcher">
+          <label for="role-select">Role:</label>
+          <span id="role-indicator">Admin</span>
+          <select id="role-select">
+            <option value="admin">Admin</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content-area">
+
+      <!--OVERVIEW PAGE  -->
+      <div class="page" id="page-overview">
+
+        <div class="section-heading">Summary</div>
+        <div class="cards-grid">
+          
+          <div class="stat-card" id="stat-card1">
+            <div class="stat-card-top">
+              <div class="stat-label">Total balance</div>
+              <div class="stat-icon blue">RS</div>
+            </div>
+            <div class="stat-value" id="stat-balance">24,830 RS.</div>
+            <canvas class="spark" id="spark-balance"></canvas>
+            <div class="stat-card-bottom">
+              <div class="stat-meta">vs last month</div>
+              <div id="badge-balance"></div>
+            </div>
+          </div>
+          
+          <div class="stat-card" id="stat-card2">
+            <div class="stat-card-top">
+              <div class="stat-label">Total income</div>
+              <div class="stat-icon green">📈</div>
+            </div>
+            <div class="stat-value" style="color:#16A34A" id="stat-income">8,400 .RS</div>
+            <canvas class="spark" id="spark-income"></canvas>
+            <div class="stat-card-bottom">
+              <div class="stat-meta">vs last month</div>
+              <div id="badge-income"></div>
+            </div>
+          </div>
+          <div class="stat-card" id="stat-card3">
+            <div class="stat-card-top">
+              <div class="stat-label">Total expenses</div>
+              <div class="stat-icon red">📉</div>
+            </div>
+            <div class="stat-value" style="color:#DC2626" id="stat-expense">5,210 RS</div>
+            <canvas class="spark" id="spark-expense"></canvas>
+            <div class="stat-card-bottom">
+              <div class="stat-meta">vs last month</div>
+              <div id="badge-expense"></div>
+            </div>
+          </div>
+          <div class="stat-card" id="stat-card4">
+            <div class="stat-card-top">
+              <div class="stat-label">Net savings</div>
+              <div class="stat-icon purple">🏦</div>
+            </div>
+            <div class="stat-value" id="stat-savings">3,190 RS</div>
+            <canvas class="spark" id="spark-savings"></canvas>
+            <div class="stat-card-bottom">
+              <div class="stat-meta">vs last month</div>
+              <div id="badge-savings"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-heading">Visualizations</div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-head">
+              <div class="chart-title">Income vs expenses — last 6 months</div>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#3B82F6"></div>Income</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Expenses</div>
+              </div>
+            </div>
+            <canvas id="bar-chart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-head">
+              <div class="chart-title">Spending by category</div>
+            </div>
+            <div class="donut-wrap">
+              <canvas id="donut-chart"></canvas>
+              <div class="donut-legend">
+                <div class="donut-row" id="donut1"><div class="donut-swatch" style="background:#FF5722"></div><span class="donut-cat" >Rent</span><span class="donut-pct">40%</span><span class="donut-amt">2,100 RS </span></div>
+                <div class="donut-row" id="donut2"><div class="donut-swatch" style="background:#FFC107"></div><span class="donut-cat" >Food</span><span class="donut-pct">26%</span><span class="donut-amt">461 RS</span></div>
+                <div class="donut-row" id="donut3"><div class="donut-swatch" style="background:#00BCD4"></div><span class="donut-cat"  >Utilities</span><span class="donut-pct">18%</span><span class="donut-amt">197 RS</span></div>
+                <div class="donut-row" id="donut4"><div class="donut-swatch" style="background:#7C4DFF"></div><span class="donut-cat" >Subs</span><span class="donut-pct">12%</span><span class="donut-amt">28 RS</span></div>
+                <div class="donut-row" id="donut5"><div class="donut-swatch" style="background:#78909C"></div><span class="donut-cat" >Other</span><span class="donut-pct">4%</span><span class="donut-amt">424 RS</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-heading">Recent transactions</div>
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Latest activity</div>
+            <button class="add-btn admin-only" onclick="navigateTo('transactions')">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+              View all
+            </button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="overview-tx-list"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="page" id="page-transactions">
+        <div class="table-card">
+          <div class="table-header">
+            <div>
+              <div class="table-title">All transactions</div>
+              <div id="tx-count" style="margin-top:2px"></div>
+            </div>
+            <div class="table-controls">
+              <div class="filter-pills">
+                <button class="filter-pill active" data-filter="all">All</button>
+                <button class="filter-pill" data-filter="income">Income</button>
+                <button class="filter-pill" data-filter="expense">Expenses</button>
+              </div>
+              <div class="search-wrap">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <input type="text" id="tx-search" placeholder="Search transactions…" />
+              </div>
+              <button class="add-btn admin-only" id="add-tx-btn">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+                Add transaction
+              </button>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date <button class="sort-btn" data-col="date">↕</button></th>
+                <th>Description <button class="sort-btn" data-col="desc">↕</button></th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Amount <button class="sort-btn" data-col="amount">↕</button></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tx-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ INSIGHTS PAGE ══ -->
+      <div class="page" id="page-insights">
+        <div class="section-heading">Key insights</div>
+        <div class="insights-grid">
+          <div class="insight-card" id="insight-card1">
+            <div class="insight-tag red">Top spending</div>
+            <div class="insight-big" id="insight-top-cat">Rent</div>
+            <div class="insight-sub">Highest category this month — <strong id="insight-top-amt">2,100 RS</strong></div>
+          </div>
+          <div class="insight-card" id="insight-card2">
+            <div class="insight-tag green">Savings rate</div>
+            <div class="insight-big" id="insight-savings-rate">38%</div>
+            <div class="insight-sub">Above the recommended 20% goal </div>
+          </div>
+          <div class="insight-card" id="insight-card3">
+            <div class="insight-tag amber">Expense change</div>
+            <div class="insight-big" id="insight-exp-change">+8.1%</div>
+            <div class="insight-sub">Expenses vs previous month</div>
+          </div>
+          <div class="insight-card" id="insight-card4">
+            <div class="insight-tag blue">Income this month</div>
+            <div class="insight-big" id="insight-income">8,400 RS</div>
+            <div class="insight-sub">Expenses: <strong id="insight-expenses">5,210 RS</strong></div>
+          </div>
+        </div>
+
+        <div class="section-heading">Spending breakdown</div>
+        <div class="chart-card" style="margin-bottom:20px">
+          <div class="chart-head">
+            <div class="chart-title">Expenses by category</div>
+          </div>
+          <div id="cat-breakdown-list"></div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-head">
+              <div class="chart-title">Income vs expenses trend</div>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#3B82F6"></div>Income</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Expenses</div>
+              </div>
+            </div>
+            <canvas id="insights-bar-chart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-head">
+              <div class="chart-title">Monthly comparison</div>
+            </div>
+            <div class="compare-head">
+              <span>Month</span><span>Income</span><span>Expenses</span><span>Net</span>
+            </div>
+            <div id="monthly-compare"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD / EDIT MODAL ══ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modal-title">Add transaction</h2>
+      <button class="modal-close-btn" id="modal-close">✕</button>
+    </div>
+    <form id="modal-form">
+      <input type="hidden" id="modal-id"/>
+      <div class="form-row">
+        <label for="modal-date">Date</label>
+        <input type="date" id="modal-date" required/>
+      </div>
+      <div class="form-row">
+        <label for="modal-desc">Description</label>
+        <input type="text" id="modal-desc" placeholder="e.g. Grocery store" required/>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row">
+          <label for="modal-type">Type</label>
+          <select id="modal-type">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="modal-amount">Amount (RS)</label>
+          <input type="number" id="modal-amount" min="0.01" step="0.01" placeholder="0.00" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="modal-category">Category</label>
+        <select id="modal-category">
+          <option>Salary</option>
+          <option>Freelance</option>
+          <option>Investment</option>
+          <option>Rent</option>
+          <option>Food</option>
+          <option>Utilities</option>
+          <option>Transport</option>
+          <option>Subscriptions</option>
+          <option>Health</option>
+          <option>Education</option>
+          <option>Shopping</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="modal-cancel">Cancel</button>
+        <button type="submit" class="btn-save">Save transaction</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div id="toast"></div>
+
+<script src="data.js"></script>
+<script src="charts.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
