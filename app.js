@@ -1,6 +1,6 @@
 // ─── Helpers ────────────────────────────────────────────────
 function fmt(n) {
-  return "RS"+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits: 0});
+  return Math.abs(n).toLocaleString("en-US",{minimumFractionDigits: 0})+" RS";
 }
 function fmtDate(iso) {
   const d=new Date(iso + "T00:00:00");
@@ -12,7 +12,7 @@ function el(id) {
 
 // ─── Computed Data (always derived fresh from transactions[]) ──
 function computeStats() {
-  const income=transactions.filter(t => t.type==="income").reduce((s,t) => s + t.amount,0);
+  const income=transactions.filter(t =>t.type==="income").reduce((s,t)=>s+t.amount,0);
   const expenses=transactions.filter(t =>t.type==="expense").reduce((s,t)=>s+t.amount,0);
   const net=income-expenses;
   const balance=24830+(net-3190);
@@ -52,8 +52,8 @@ function computeMonthlyData() {
 
 function computeSpendingBreakdown() {
   const catTotals = {};
-  transactions.filter(t => t.type === "expense").forEach(t => {
-    catTotals[t.category] = (catTotals[t.category] || 0) + t.amount;
+  transactions.filter(t =>t.type==="expense").forEach(t=>{
+    catTotals[t.category]=(catTotals[t.category] || 0)+t.amount;
   });
   const total=Object.values(catTotals).reduce((s,v)=>s+v, 0)|| 1;
   const sorted=Object.entries(catTotals).sort((a,b)=>b[1]-a[1]);
@@ -65,7 +65,7 @@ function computeSpendingBreakdown() {
     pct: Math.round((amount / total) * 100),
     color:(categoryColors[label] && categoryColors[label].dot)||colorList[i],
   }));
-  if(otherAmt>0)result.push({ label: "Other",amount: otherAmt, pct:Math.round((otherAmt/total)*100), color: "#78909C" });
+  if(otherAmt>0)result.push({ label:"Other",amount: otherAmt, pct:Math.round((otherAmt/total)*100), color:"#78909C"});
   return result;
 }
 
@@ -79,41 +79,41 @@ function computeCategoryBreakdown() {
 
 // ─── Master refresh ───────────────────────────────────────────
 function refreshAll() {
-  if (AppState.activePage === "overview")     renderOverview();
-  if (AppState.activePage === "transactions") renderTransactions();
-  if (AppState.activePage === "insights")     renderInsights();
+  if (AppState.activePage==="overview")renderOverview();
+  if (AppState.activePage==="transactions")renderTransactions();
+  if (AppState.activePage==="insights")renderInsights();
 }
 
 // ─── Page Router ─────────────────────────────────────────────
 function navigateTo(page) {
   AppState.activePage = page;
-  document.querySelectorAll(".nav-item").forEach(n => {
-    n.classList.toggle("active", n.dataset.page === page);
+  document.querySelectorAll(".nav-item").forEach(n=>{
+    n.classList.toggle("active",n.dataset.page===page);
   });
   document.querySelectorAll(".page").forEach(p => {
-    p.style.display = p.id === "page-" + page ? "block" : "none";
+    p.style.display=p.id==="page-"+page ? "block":"none";
   });
-  if (page === "overview")     renderOverview();
-  if (page === "transactions") renderTransactions();
-  if (page === "insights")     renderInsights();
+  if (page==="overview")renderOverview();
+  if (page==="transactions")renderTransactions();
+  if (page==="insights")renderInsights();
 }
 
 // ─── Role ─────────────────────────────────────────────────────
 function applyRole() {
-  const isAdmin = AppState.role === "admin";
-  document.querySelectorAll(".admin-only").forEach(e => { e.style.display = isAdmin ? "" : "none"; });
-  document.querySelectorAll(".viewer-badge").forEach(e => { e.style.display = isAdmin ? "none" : "flex"; });
-  el("role-indicator").textContent    = isAdmin ? "Admin" : "Viewer";
-  el("role-dot").className            = "role-dot " + AppState.role;
-  el("role-select").value             = AppState.role;
-  el("sidebar-role-text").textContent = isAdmin ? "Administrator" : "Viewer";
+  const isAdmin = AppState.role==="admin";
+  document.querySelectorAll(".admin-only").forEach(e=>{ e.style.display=isAdmin ? "":"none";});
+  document.querySelectorAll(".viewer-badge").forEach(e=>{ e.style.display=isAdmin ? "none":"flex";});
+  el("role-indicator").textContent=isAdmin ? "Admin":"Viewer";
+  el("role-dot").className="role-dot "+AppState.role;
+  el("role-select").value=AppState.role;
+  el("sidebar-role-text").textContent=isAdmin ? "Administrator" : "Viewer";
 }
 
 // ─── Badge helper ─────────────────────────────────────────────
-function makeBadge(val, positiveIsGood) {
-  const num  = parseFloat(val);
-  const up   = num >= 0;
-  const good = positiveIsGood ? up : !up;
+function makeBadge(val,positiveIsGood) {
+  const num=parseFloat(val);
+  const up=num>=0;
+  const good=positiveIsGood ? up:!up;
   return `<span class="${good ? "badge-up" : "badge-down"}">${up ? "↑" : "↓"} ${Math.abs(num).toFixed(1)}%</span>`;
 }
 
@@ -126,8 +126,8 @@ function txRow(t) {
       <td class="tx-date">${fmtDate(t.date)}</td>
       <td class="tx-desc">${t.desc}</td>
       <td><span class="cat-pill" style="background:${col.bg};color:${col.text}">${t.category}</span></td>
-      <td><span class="type-pill ${t.type}">${t.type === "income" ? "Income" : "Expense"}</span></td>
-      <td class="tx-amount ${t.type}">${t.type === "income" ? "+" : "-"}${fmt(t.amount)}</td>
+      <td><span class="type-pill ${t.type}">${t.type==="income" ? "Income":"Expense"}</span></td>
+      <td class="tx-amount ${t.type}">${t.type==="income" ? "+" : "-"}${fmt(t.amount)}</td>
       ${isAdmin
         ? `<td class="tx-actions">
              <button class="action-btn edit-btn" onclick="openEditModal(${t.id})">Edit</button>
@@ -255,9 +255,9 @@ function renderInsights() {
       }).join("")
     : `<div class="empty-state"><div class="empty-icon">📊</div><div>No expense data yet</div></div>`;
 
-  const compList = el("monthly-compare");
-  compList.innerHTML = monthlyData.map(m => {
-    const net = m.income - m.expenses;
+  const compList=el("monthly-compare");
+  compList.innerHTML=monthlyData.map(m=>{
+    const net=m.income-m.expenses;
     return `
       <div class="compare-row">
         <span class="compare-month">${m.month}</span>

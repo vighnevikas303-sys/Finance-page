@@ -104,13 +104,14 @@ const Charts = (() => {
     ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--surface") || "#fff";
     ctx.fill();
 
-    ctx.textAlign = "center";
-    ctx.fillStyle = "rgba(30,30,30,0.5)";
-    ctx.font = "10px 'DM Sans', sans-serif";
-    ctx.fillText("TOTAL", cx, cy - 7);
-    ctx.fillStyle = "#111";
-    ctx.font = "bold 14px 'DM Sans', sans-serif";
-    ctx.fillText("5,210 RS", cx, cy + 9);
+    ctx.textAlign="center";
+    ctx.fillStyle="rgba(30,30,30,0.5)";
+    ctx.font="10px 'DM Sans', sans-serif";
+    ctx.fillText("TOTAL",cx,cy-7);
+    ctx.fillStyle="#111";
+    ctx.font="bold 14px 'DM Sans', sans-serif";
+    const total=segments.reduce((sum, s)=>sum+s.amount,0);
+    ctx.fillText(fmt(total),cx,cy+9);
   }
 
   function drawMiniLine(canvasId, data, color) {
